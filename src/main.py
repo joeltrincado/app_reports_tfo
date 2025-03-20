@@ -40,6 +40,18 @@ def main(page: ft.Page):
         page.update()
 
     def b_q_change(e):
+        """
+        Updates the global b_q and b_q_c variables with the selected bin quantity.
+
+        This function is triggered when the bin quantity selection changes in the UI.
+        It updates the global `b_q` and `b_q_c` variables with the value from the
+        control event and refreshes the page.
+
+        Parameters
+        ----------
+        e : Event
+            The event object containing the control with the new bin quantity value.
+        """
         global b_q
         global b_q_c
         b_q = e.control.value
