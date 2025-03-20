@@ -13,6 +13,7 @@ def main(page: ft.Page):
     global registers
     global b_q_c
     global printer_name
+    global datee
     b_q = 1
     b_q_c = b_q
     r_n = ""
@@ -20,6 +21,7 @@ def main(page: ft.Page):
     c = ""
     printer_name = ""
     registers = pd.DataFrame( columns=['Factura', 'Cantidad'])
+    counter = ft.Text("0", size=40, data=0, text_align=ft.TextAlign.END)
 
     #onchanges
     def onChnage_printer(e):
@@ -38,6 +40,18 @@ def main(page: ft.Page):
 
         global printer_name
         printer_name = e.control.value
+        if printer_name == "" or printer_name == "Seleccione un Impresora":
+            bin_qty.disabled = True
+            bin_count.disabled = True
+            ref_num.disabled = True
+            btn_save.disabled = True
+            btn_save.bgcolor = ft.Colors.GREY_400
+        else:
+            bin_qty.disabled = False
+            bin_count.disabled = False
+            ref_num.disabled = False
+            btn_save.disabled = False
+            btn_save.bgcolor = ft.Colors.GREEN_900
         page.update()
 
     def b_q_change(e):
@@ -59,11 +73,14 @@ def main(page: ft.Page):
         try:
             b_q = int(b_q)
             b_q_c = b_q
+            counter.data = b_q
+            counter.value = f"{b_q}"
             bin_qty.border_color = ft.Colors.BLACK
             page.update()
         except:
             bin_qty.value = 1
-            bin_qty.border_color = "red"
+            counter.data = 1
+            counter.value = str(counter.data)
             page.update()
     def r_n_change(e):
         """
@@ -117,8 +134,8 @@ def main(page: ft.Page):
         global b_c
         global b_q_c
         global printer_name
+        global datee
         position = e.control.value.find("EXPO")
-        datee = datetime.datetime.now().strftime('%H:%M:%S')
         if position != -1:
             factura_value = e.control.value[position:]
             filter_inv = registers[registers['Factura'] == factura_value]
@@ -128,8 +145,11 @@ def main(page: ft.Page):
             else:
                 registers.loc[registers['Factura'] == factura_value, 'Cantidad'] += 1
             b_q_c -= 1
+            counter.data -= 1
+            counter.value = str(counter.data)
         if b_q_c == 0:
             print_reports(registers, b_q, r_n, b_c,datee, printer_name)
+            registers = registers.iloc[0:0]
             bin_count.disabled = False
             ref_num.disabled = False
             btn_print.disabled = True
@@ -141,20 +161,11 @@ def main(page: ft.Page):
             code.disabled = True
             bin_count.value = ""
             ref_num.value = ""
+            counter.data = 1
+            counter.value = str(counter.data)
         code.value = ""
         page.update()
 
-     #setting page
-    page.title = "SOFTWARE DE CONTROL DE REPORTES"
-    page.appbar = AppBar_(onchange=onChnage_printer).create()
-        
-            
-    #alerts
-    alert = ft.AlertDialog(
-        title=ft.Text("Alerta"),
-        content=ft.Text("Complete todos los campos")
-    ) 
-    alert.open = False
 
     #functions
     def print_report(e):
@@ -183,6 +194,8 @@ def main(page: ft.Page):
             The event object triggered by the click action on the save button.
         """
         global b_q, r_n, b_c
+        global datee
+        datee = datetime.datetime.now().strftime('%H:%M:%S')
         if r_n != "" and b_c != "":
             btn_print.disabled = False
             code.disabled = False
@@ -192,13 +205,22 @@ def main(page: ft.Page):
             bin_count.disabled = True
             btn_print.bgcolor = ft.Colors.BLUE_900
             btn_save.bgcolor = ft.Colors.GREY_400
-            page.update()
         else:
             alert.open = True
-            page.update()
+        page.update()
 
    
-
+     #setting page
+    page.title = "SOFTWARE DE CONTROL DE REPORTES"
+    page.appbar = AppBar_(onchange=onChnage_printer).create()
+        
+            
+    #alerts
+    alert = ft.AlertDialog(
+        title=ft.Text("Alerta"),
+        content=ft.Text("Complete todos los campos")
+    ) 
+    alert.open = False
 
     # inputs
     bin_qty = TextField_('Bin Qty', 200, b_q_change).create()
@@ -206,13 +228,25 @@ def main(page: ft.Page):
     bin_count = TextField_('Bin Count', 200, b_c_change).create()
     code = ft.TextField(label="Código de Barras", width=200, on_submit=c_change, border_color=ft.colors.BLACK54,expand=True, shift_enter=True)
     code.disabled = True
+    bin_qty.disabled = True
+    bin_count.disabled = True
+    ref_num.disabled = True
 
     #btns
     btn_print = ft.ElevatedButton("Imprimir", on_click=lambda e: print_report(e), width=250, height=50,
                             style=ft.ButtonStyle(bgcolor=ft.Colors.GREY_400,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
     btn_print.disabled = True
     btn_save = ft.ElevatedButton("Guardar", on_click=lambda e: save_data(e), width=250, height=50,
-                            style=ft.ButtonStyle(bgcolor=ft.Colors.GREEN_900,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
+                            style=ft.ButtonStyle(bgcolor=ft.Colors.GREY_400,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
+    btn_save.disabled = True
+
+    #box counter
+    box_count = ft.SafeArea(
+            ft.Container(
+                counter,
+                alignment=ft.alignment.center,
+            ),
+        )
 
     #page front end
     page.add(
@@ -220,6 +254,7 @@ def main(page: ft.Page):
             [
                 ft.Row([bin_qty, ref_num, bin_count, btn_save], expand=True, height=60),
                 ft.Row([code, btn_print], expand=True, height=60),
+                ft.Row([ft.Text(" Número de cajas restantes:", size=40), ft.Container(content=box_count, alignment=ft.alignment.center, padding=10, width=100)], alignment=ft.MainAxisAlignment.END, expand=True),
             ]
         ),
         alert

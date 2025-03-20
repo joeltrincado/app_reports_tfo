@@ -39,7 +39,7 @@ class AppBar_():
                         options=self.printers_list,
                         on_change=self.on_change,    
                         value=self.printer,
-                        label="Impresora",
+                        label="Selecciona Impresora",
                         width=300,
                     ),padding=ft.padding.only(right=10)
                 )
