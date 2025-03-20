@@ -100,7 +100,6 @@ def list_active_printers():
     """
     system = platform.system()
     if system == "Windows":
-        import win32print
         printers = win32print.EnumPrinters(win32print.PRINTER_ENUM_LOCAL | win32print.PRINTER_ENUM_CONNECTIONS)
         # Filter only active printers
         active_printers = []

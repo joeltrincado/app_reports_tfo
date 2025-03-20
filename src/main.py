@@ -146,7 +146,7 @@ def main(page: ft.Page):
 
      #setting page
     page.title = "SOFTWARE DE CONTROL DE REPORTES"
-    page.appbar = AppBar_(onchange=onChnage_printer).create()
+    page.appbar = AppBar_(page=page,onchange=onChnage_printer).create()
         
             
     #alerts
@@ -156,6 +156,7 @@ def main(page: ft.Page):
     ) 
     alert.open = False
 
+   
     #functions
     def print_report(e):
         """
@@ -213,7 +214,6 @@ def main(page: ft.Page):
     btn_print.disabled = True
     btn_save = ft.ElevatedButton("Guardar", on_click=lambda e: save_data(e), width=250, height=50,
                             style=ft.ButtonStyle(bgcolor=ft.Colors.GREEN_900,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
-
     #page front end
     page.add(
         ft.Column(
