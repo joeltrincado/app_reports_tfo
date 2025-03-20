@@ -21,7 +21,7 @@ def main(page: ft.Page):
     c = ""
     printer_name = ""
     registers = pd.DataFrame( columns=['Factura', 'Cantidad'])
-    counter = ft.Text("0", size=40, data=0, text_align=ft.TextAlign.END)
+    counter = ft.Text("0", size=60, data=0, text_align=ft.TextAlign.END)
 
     #onchanges
     def onChnage_printer(e):
@@ -76,11 +76,13 @@ def main(page: ft.Page):
             counter.data = b_q
             counter.value = f"{b_q}"
             bin_qty.border_color = ft.Colors.BLACK
+            info_b_q.value = f" Bin Qty: {b_q}"
             page.update()
         except:
             bin_qty.value = 1
             counter.data = 1
             counter.value = str(counter.data)
+            info_b_q.value = f" Bin Qty: {b_q}"
             page.update()
     def r_n_change(e):
         """
@@ -149,6 +151,7 @@ def main(page: ft.Page):
             counter.value = str(counter.data)
         if b_q_c == 0:
             print_reports(registers, b_q, r_n, b_c,datee, printer_name)
+            info_report.visible = False
             registers = registers.iloc[0:0]
             bin_count.disabled = False
             ref_num.disabled = False
@@ -205,6 +208,10 @@ def main(page: ft.Page):
             bin_count.disabled = True
             btn_print.bgcolor = ft.Colors.BLUE_900
             btn_save.bgcolor = ft.Colors.GREY_400
+            info_report.visible = True
+            info_b_c.value = f" Bin Qty: {b_q}"
+            info_r_n.value = f" Ref Num: {r_n}"
+            info_b_c.value = f" Bin Count: {b_c}"
         else:
             alert.open = True
         page.update()
@@ -226,7 +233,7 @@ def main(page: ft.Page):
     bin_qty = TextField_('Bin Qty', 200, b_q_change).create()
     ref_num = TextField_('Ref Num', 200, r_n_change).create()
     bin_count = TextField_('Bin Count', 200, b_c_change).create()
-    code = ft.TextField(label="Código de Barras", width=200, on_submit=c_change, border_color=ft.colors.BLACK54,expand=True, shift_enter=True)
+    code = ft.TextField(label="Código de Barras", width=200, on_submit=c_change, border_color=ft.Colors.BLACK54,expand=True, shift_enter=True)
     code.disabled = True
     bin_qty.disabled = True
     bin_count.disabled = True
@@ -247,6 +254,19 @@ def main(page: ft.Page):
                 alignment=ft.alignment.center,
             ),
         )
+    
+    #info
+    info_b_q= ft.Text(value=f" Bin Qty: {b_q}", size=40)
+    info_r_n= ft.Text(value=f" Ref Num: {r_n}", size=40)
+    info_b_c= ft.Text(value=f" Bin Count: {b_c}", size=40)
+    info_report = ft.Column(
+                    [
+                        info_b_q,
+                        info_r_n,
+                        info_b_c
+                    ], alignment=ft.MainAxisAlignment.CENTER, expand=True, horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                )
+    info_report.visible = False
 
     #page front end
     page.add(
@@ -254,8 +274,9 @@ def main(page: ft.Page):
             [
                 ft.Row([bin_qty, ref_num, bin_count, btn_save], expand=True, height=60),
                 ft.Row([code, btn_print], expand=True, height=60),
-                ft.Row([ft.Text(" Número de cajas restantes:", size=40), ft.Container(content=box_count, alignment=ft.alignment.center, padding=10, width=100)], alignment=ft.MainAxisAlignment.END, expand=True),
-            ]
+                ft.Row([ft.Text(" Número de cajas restantes:", size=60), ft.Container(content=box_count, alignment=ft.alignment.center, padding=10, width=100)], alignment=ft.MainAxisAlignment.CENTER, expand=True),
+                ft.Row([info_report], alignment=ft.MainAxisAlignment.CENTER, expand=True),
+            ],
         ),
         alert
     )

@@ -42,6 +42,6 @@ class AppBar_():
                         label="Selecciona Impresora",
                         width=300,
                     ),padding=ft.padding.only(right=10)
-                )
+                ),
             ]
         )
