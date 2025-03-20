@@ -172,7 +172,19 @@ def main(page: ft.Page):
         code.value = ""
         page.update()
 
+     #setting page
+    page.title = "SOFTWARE DE CONTROL DE REPORTES"
+    page.appbar = AppBar_(page=page,onchange=onChnage_printer).create()
+        
+            
+    #alerts
+    alert = ft.AlertDialog(
+        title=ft.Text("Alerta"),
+        content=ft.Text("Complete todos los campos")
+    ) 
+    alert.open = False
 
+   
     #functions
     def print_report(e):
         """
@@ -222,7 +234,7 @@ def main(page: ft.Page):
    
      #setting page
     page.title = "SOFTWARE DE CONTROL DE REPORTES"
-    page.appbar = AppBar_(onchange=onChnage_printer).create()
+    page.appbar = AppBar_(page=page,onchange=onChnage_printer).create()
         
             
     #alerts
@@ -247,7 +259,7 @@ def main(page: ft.Page):
                             style=ft.ButtonStyle(bgcolor=ft.Colors.GREY_400,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
     btn_print.disabled = True
     btn_save = ft.ElevatedButton("Guardar", on_click=lambda e: save_data(e), width=250, height=50,
-                            style=ft.ButtonStyle(bgcolor=ft.Colors.GREY_400,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
+    style=ft.ButtonStyle(bgcolor=ft.Colors.GREEN_900,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
     btn_save.disabled = True
 
     #box counter
