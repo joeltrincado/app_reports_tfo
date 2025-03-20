@@ -33,7 +33,7 @@ def process_printer(printer_handle, registers,  b_q, r_n, b_c, datee):
 
         content = f"""
 	        SIZE 101.10 mm, 51.1 mm
-            GAP 0 mm, 0 mm
+            GAP 3 mm, 0 mm
             CODEPAGE UTF-8
             TEXT 764,363,"0",180,12,12,"Ref Num " + "{r_n}"
             TEXT 761,274,"0",180,10,10,"Bin Qty " + "{b_q}"
@@ -47,12 +47,12 @@ def process_printer(printer_handle, registers,  b_q, r_n, b_c, datee):
         sum_ = registers['Cantidad'].sum()
         for index, row in registers.iterrows():
             print(row)
-            if index <= 2:
+            if index <= 6:
                 content += f"""
                 TEXT {x},{y},"0",180,8,8,"{row['Cantidad']}" + " " + "{row['Factura']}"
             """
                 y -= dy
-            elif index > 2 and index <= 12:
+            elif index > 6 and index <= 12:
                 content += f"""
                 TEXT {x2},{y2},"0",180,8,8,"{row['Cantidad']}" + " " + "{row['Factura']}"
                 """
@@ -65,8 +65,6 @@ def process_printer(printer_handle, registers,  b_q, r_n, b_c, datee):
             CLS
             EOJ
             """
-        
-        print(content)
         try:
 
             hJob = win32print.StartDocPrinter(

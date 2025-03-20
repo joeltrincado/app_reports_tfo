@@ -78,13 +78,16 @@ class AppBar_():
                         options=self.printers_list,
                         on_change=self.on_change,    
                         value=self.printer,
-                        label="Impresora",
+                        label="Selecciona Impresora",
                         width=300,
                     ),padding=ft.padding.only(right=10)
                 ),
+<<<<<<< HEAD
                 ft.Container(
                     content=ft.IconButton(
                         ft.Icons.HELP, tooltip="Ayuda", on_click=lambda _: self.onClick_help(_)),padding=ft.padding.only(right=10)
                 ), self.alert_help
+=======
+>>>>>>> main
             ]
         )
