@@ -8,6 +8,7 @@ import datetime
 
 def main(page: ft.Page):
     #vars globals
+    
     global b_q, r_n, b_c, c
     global registers
     global b_q_c
@@ -65,6 +66,18 @@ def main(page: ft.Page):
             bin_qty.border_color = "red"
             page.update()
     def r_n_change(e):
+        """
+        Updates the global r_n variable with the selected ref number.
+
+        This function is triggered when the ref number selection changes in the UI.
+        It updates the global `r_n` variable with the value from the
+        control event and refreshes the page.
+
+        Parameters
+        ----------
+        e : Event
+            The event object containing the control with the new ref number value.
+        """
         global r_n
         r_n = e.control.value
     def b_c_change(e):
