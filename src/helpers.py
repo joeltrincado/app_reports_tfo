@@ -128,5 +128,30 @@ def list_active_printers():
     
 
 def print_reports(registers,  b_q, r_n,b_c,datee, printer_name):
+    """
+    Sends a raw print job to the printer specified by printer_name.
+
+    The report to be printed is generated from the registers dataframe, which
+    contains the report data, and the other parameters.
+
+    Parameters
+    ----------
+    registers : pandas.DataFrame
+        The dataframe containing the report data
+    b_q : str
+        The bin quantity
+    r_n : str
+        The ref number
+    b_c : str
+        The bin count
+    datee : str
+        The date in the format '%H:%M:%S'
+    printer_name : str
+        The name of the printer to send the job to
+
+    Returns
+    -------
+    None
+    """
     printer_handle = win32print.OpenPrinter(printer_name)
     process_printer(printer_handle, registers,  b_q, r_n, b_c, datee)

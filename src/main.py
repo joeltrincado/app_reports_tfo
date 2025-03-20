@@ -98,9 +98,36 @@ def main(page: ft.Page):
         global r_n
         r_n = e.control.value
     def b_c_change(e):
+        """
+        Updates the global b_c variable with the selected bin count.
+
+        This function is triggered when the bin count selection changes in the UI.
+        It updates the global `b_c` variable with the value from the
+        control event and refreshes the page.
+
+        Parameters
+        ----------
+        e : Event
+            The event object containing the control with the new bin count value.
+        """
         global b_c
         b_c = e.control.value
     def c_change(e):
+        """
+        Handles the change event for the code input.
+
+        This function is triggered when the code input changes in the UI.
+        It checks if the new value contains the string "EXPO" and if so, it
+        updates the global `registers` DataFrame with the new value and
+        decreases the global `b_q_c` variable by one. If `b_q_c` is zero, it
+        calls the `print_reports` function with the current values of the
+        global variables and refreshes the page.
+
+        Parameters
+        ----------
+        e : Event
+            The event object containing the control with the new code value.
+        """
         global registers
         global b_q
         global r_n
@@ -142,9 +169,30 @@ def main(page: ft.Page):
 
     #functions
     def print_report(e):
+        """
+        Initiates the report printing process.
+
+        This function is triggered when the print button is clicked in the UI.
+        It utilizes global variables to gather necessary data and sends it
+        to the printer for printing the report.
+
+        Parameters
+        ----------
+        e : Event
+            The event object triggered by the click action on the print button.
+        """
         global b_q, r_n, b_c
 
     def save_data(e):
+        """
+        Enables the print button and disables the save button if the required fields
+        for the report are filled. Otherwise, it displays an alert.
+
+        Parameters
+        ----------
+        e : Event
+            The event object triggered by the click action on the save button.
+        """
         global b_q, r_n, b_c
         global datee
         datee = datetime.datetime.now().strftime('%H:%M:%S')
