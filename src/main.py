@@ -22,6 +22,19 @@ def main(page: ft.Page):
 
     #onchanges
     def onChnage_printer(e):
+        """
+        Updates the global printer_name variable with the selected printer.
+
+        This function is triggered when the printer selection changes in the UI.
+        It updates the global `printer_name` variable with the value from the
+        control event and refreshes the page.
+
+        Parameters
+        ----------
+        e : Event
+            The event object containing the control with the new printer value.
+        """
+
         global printer_name
         printer_name = e.control.value
         page.update()
