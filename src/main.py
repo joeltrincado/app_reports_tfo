@@ -165,6 +165,9 @@ def main(page: ft.Page):
             bin_count.value = ""
             ref_num.value = ""
             counter.data = 1
+            b_q_c = 1
+            b_q = 1
+            info_b_q.value = f" Bin Qty: {b_q}"
             counter.value = str(counter.data)
         code.value = ""
         page.update()
