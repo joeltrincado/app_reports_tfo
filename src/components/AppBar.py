@@ -82,12 +82,10 @@ class AppBar_():
                         width=300,
                     ),padding=ft.padding.only(right=10)
                 ),
-<<<<<<< HEAD
+            
                 ft.Container(
                     content=ft.IconButton(
                         ft.Icons.HELP, tooltip="Ayuda", on_click=lambda _: self.onClick_help(_)),padding=ft.padding.only(right=10)
                 ), self.alert_help
-=======
->>>>>>> main
             ]
         )
