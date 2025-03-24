@@ -57,6 +57,11 @@ def process_printer(printer_handle, registers,  b_q, r_n, b_c, datee):
                 TEXT {x2},{y2},"0",180,8,8,"{row['Cantidad']}" + " " + "{row['Factura']}"
                 """
                 y2 -= dy
+            else:
+                content += f"""
+                TEXT {x2},{y2},"0",180,8,8,"MÁS..."
+                """
+                y2 -= dy
                 
         content += f"""
             BAR 120,64, 300, 3	

@@ -24,7 +24,7 @@ def main(page: ft.Page):
     datee = ""
     printer_name = ""
     registers = pd.DataFrame( columns=['Factura', 'Cantidad'])
-    counter = ft.Text("0", size=60, data=0, text_align=ft.TextAlign.END)
+    counter = ft.Text("0", size=560, data=0)
 
     #onchanges
     def onChnage_printer(e):
@@ -147,7 +147,6 @@ def main(page: ft.Page):
         global b_q_c
         global printer_name
         global datee
-        datee = datetime.datetime.now().strftime('%H:%M:%S')
         if datee != "" and printer_name != "" and r_n != "" and b_c != "" and b_q != "":
             position = e.control.value.find("EXPO")
             if position != -1:
@@ -175,13 +174,18 @@ def main(page: ft.Page):
                 bin_qty.value = 1
                 bin_count.value = ""
                 ref_num.value = ""
-                counter.data = 1
+                counter.data = 0
                 b_q_c = 1
                 b_q = 1
                 r_n = ""
                 b_c = ""
                 info_b_q.value = f" Bin Qty: {b_q}"
                 counter.value = str(counter.data)
+                general_info.bgcolor = ft.Colors.WHITE
+                info_b_q.color = ft.Colors.BLACK54
+                info_r_n.color = ft.Colors.BLACK54
+                info_b_c.color = ft.Colors.BLACK54
+                counter.color = ft.Colors.BLACK54
         else:
             alert.open = True
             alert.content = ft.Text("Complete todos los campos")
@@ -211,15 +215,14 @@ def main(page: ft.Page):
         global registers
         global printer_name
         global datee
-        b = b_q - b_q_c
-        if b != 0:
-            print_reports(registers, b, r_n, b_c, datee, printer_name)
+        if b_q != 0:
+            print_reports(registers, b_q, r_n, b_c, datee, printer_name)
             registers = registers.iloc[0:0]
             info_report.visible = False
             bin_qty.value = 1
             bin_count.value = ""
             ref_num.value = ""
-            counter.data = 1
+            counter.data = 0
             b_q_c = 1
             b_q = 1
             r_n = ""
@@ -233,6 +236,11 @@ def main(page: ft.Page):
             page.update()
             time.sleep(0.5)
             ref_num.focus()
+            general_info.bgcolor = ft.Colors.WHITE
+            info_b_q.color = ft.Colors.BLACK54
+            info_r_n.color = ft.Colors.BLACK54
+            info_b_c.color = ft.Colors.BLACK54
+            counter.color = ft.Colors.BLACK54
         else:
             alert.open = True
             alert.content = ft.Text("Registre al menos una caja")
@@ -248,9 +256,12 @@ def main(page: ft.Page):
         e : Event
             The event object triggered by the click action on the save button.
         """
-        global b_q, r_n, b_c
+        global b_q, r_n, b_c, datee
+        datee = datetime.datetime.now().strftime('%H:%M:%S')
         if r_n != "" and b_c != "" and b_q != 0 and printer_name != "":
             info_report.visible = True
+            counter.data = b_q
+            counter.value = str(counter.data)
             info_b_c.value = f" Bin Qty: {b_q}"
             info_r_n.value = f" Ref Num: {r_n}"
             info_b_c.value = f" Bin Count: {b_c}"
@@ -258,6 +269,36 @@ def main(page: ft.Page):
             ref_num.disabled = True
             bin_count.disabled = True
             bin_qty.disabled = True
+            if b_c == "60":
+                general_info.bgcolor = ft.Colors.BLACK
+                info_b_q.color = ft.Colors.WHITE
+                info_r_n.color = ft.Colors.WHITE
+                info_b_c.color = ft.Colors.WHITE
+                counter.color = ft.Colors.WHITE
+            elif b_c == "28":
+                general_info.bgcolor = ft.Colors.ORANGE_600
+                info_b_q.color = ft.Colors.WHITE
+                info_r_n.color = ft.Colors.WHITE
+                info_b_c.color = ft.Colors.WHITE
+                counter.color = ft.Colors.WHITE
+            elif b_c == "45":
+                general_info.bgcolor = ft.Colors.PURPLE_600
+                info_b_q.color = ft.Colors.WHITE
+                info_r_n.color = ft.Colors.WHITE
+                info_b_c.color = ft.Colors.WHITE
+                counter.color = ft.Colors.WHITE
+            elif b_c == "36":
+                general_info.bgcolor = ft.Colors.GREEN_600
+                info_b_q.color = ft.Colors.WHITE
+                info_r_n.color = ft.Colors.WHITE
+                info_b_c.color = ft.Colors.WHITE
+                counter.color = ft.Colors.WHITE
+            else:
+                general_info.bgcolor = ft.Colors.WHITE
+                info_b_q.color = ft.Colors.BLACK54
+                info_r_n.color = ft.Colors.BLACK54
+                info_b_c.color = ft.Colors.BLACK54
+                counter.color = ft.Colors.BLACK54
             page.update()
             time.sleep(0.5)
             code.focus()
@@ -276,6 +317,7 @@ def main(page: ft.Page):
      #setting page
     page.title = "SOFTWARE DE CONTROL DE REPORTES"
     page.appbar = AppBar_(page=page,onchange=onChnage_printer).create()
+    page.scroll = ft.ScrollMode.AUTO
         
             
     #alerts
@@ -289,7 +331,7 @@ def main(page: ft.Page):
     ref_num = TextField_('Ref Num', 200, r_n_change, ref_num_on_summit).create()
     bin_count = TextField_('Bin Count', 200, b_c_change, bin_count_on_summit).create()
     bin_qty = TextField_('Bin Qty', 200, b_q_change, bin_qty_on_summit).create()
-    code = ft.TextField(label="Código de Barras", width=200, on_submit=c_change, border_color=ft.Colors.BLACK54,expand=True, shift_enter=True)
+    code = ft.TextField(text_size=12, label="Código de Barras", width=200, height=40, on_submit=c_change, border_color=ft.Colors.BLACK54,expand=True, shift_enter=True)
     code.disabled = True
 
     #btns
@@ -297,14 +339,7 @@ def main(page: ft.Page):
                             style=ft.ButtonStyle(bgcolor=ft.Colors.GREEN_900,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
     btn_save = ft.ElevatedButton("Guardar", on_click=lambda e: save_data(e), width=250, height=50,
                             style=ft.ButtonStyle(bgcolor=ft.Colors.BLUE_900,color=ft.Colors.WHITE, shape=ft.RoundedRectangleBorder(radius=5)))
-    #box counter
-    box_count = ft.SafeArea(
-            ft.Container(
-                counter,
-                alignment=ft.alignment.center,
-            ),
-        )
-    
+
     #info
     info_b_q= ft.Text(value=f" Bin Qty: {b_q}", size=40)
     info_r_n= ft.Text(value=f" Ref Num: {r_n}", size=40)
@@ -314,21 +349,28 @@ def main(page: ft.Page):
                         info_b_q,
                         info_r_n,
                         info_b_c
-                    ], alignment=ft.MainAxisAlignment.CENTER, expand=True, horizontal_alignment=ft.CrossAxisAlignment.CENTER
+                    ], alignment=ft.MainAxisAlignment.START, horizontal_alignment=ft.CrossAxisAlignment.START
                 )
-    info_report.visible = False
+    
+    general_info = ft.Container(
+                    content=ft.Row(
+                    [
+                        ft.Container(content=info_report, alignment=ft.alignment.top_left),
+                        ft.Container(content=counter, alignment=ft.alignment.top_left, padding=ft.Padding(0, 0, 0, 0),margin=0),
+                    ], vertical_alignment=ft.CrossAxisAlignment.START,  alignment=ft.MainAxisAlignment.START, expand=True
+                ), expand=True
+                )
 
     #page front end
     page.add(
         ft.Column(
             [
-                ft.Row([ref_num, bin_count, bin_qty, btn_save], expand=True, height=60),
-                ft.Row([code, btn_print], expand=True, height=60),
-                ft.Row([ft.Text(" Número de cajas restantes:", size=60), ft.Container(content=box_count, alignment=ft.alignment.center, padding=10, width=100)], alignment=ft.MainAxisAlignment.CENTER, expand=True),
-                ft.Row([info_report], alignment=ft.MainAxisAlignment.CENTER, expand=True),
-            ],
-        ),
-        alert
+                ft.Row([ref_num, bin_count, bin_qty, btn_save], expand=True, height=40),
+                ft.Row([code, btn_print], expand=True, height=40),
+                general_info,
+                alert
+            ], expand=True
+        )
     )
 
 ft.app(main)
