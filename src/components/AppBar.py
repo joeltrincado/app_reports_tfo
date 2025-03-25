@@ -58,7 +58,7 @@ class AppBar_():
             title=ft.Text(
                 spans=[
                     ft.TextSpan(
-                        "TFO 1 JIMENEZ SPR DE RL DE CV",
+                        "UNITED FARMS of oasis",
                         ft.TextStyle(
                             size=20,
                             weight=ft.FontWeight.BOLD,
