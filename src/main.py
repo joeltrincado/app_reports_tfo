@@ -356,9 +356,9 @@ def main(page: ft.Page):
                     content=ft.Row(
                     [
                         ft.Container(content=info_report, alignment=ft.alignment.top_left),
-                        ft.Container(content=counter, alignment=ft.alignment.top_left, padding=ft.Padding(0, 0, 0, 0),margin=0),
+                        ft.Container(content=counter, padding=ft.Padding(0, -220, 0, 220),margin=0),
                     ], vertical_alignment=ft.CrossAxisAlignment.START,  alignment=ft.MainAxisAlignment.START, expand=True
-                ), expand=True
+                ), expand=True, padding=0, margin=0
                 )
 
     #page front end
